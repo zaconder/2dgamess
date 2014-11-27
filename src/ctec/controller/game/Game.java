@@ -11,10 +11,12 @@ import java.awt.image.DataBufferInt;
 
 import javax.swing.JFrame;
 
+import ctec.controller.game.entities.Player;
 import ctec.controller.game.gfx.Colours;
 import ctec.controller.game.gfx.Font;
 import ctec.controller.game.gfx.Screen;
 import ctec.controller.game.gfx.SpriteSheet;
+import ctec.controller.game.level.Level;
 
 public class Game extends Canvas implements Runnable
 {
@@ -37,6 +39,8 @@ public class Game extends Canvas implements Runnable
 	
 	private Screen screen;
 	public InputHandler input;
+	public Level level;
+	public Player player;
 	
 	public Game()
 	{
@@ -76,10 +80,11 @@ public class Game extends Canvas implements Runnable
 			}
 		}
 		
-		
-		
 		screen = new Screen (WIDTH, HEIGHT, new SpriteSheet("/sprite_sheet.png"));
 		input = new InputHandler(this);
+		level = new Level(64,64);
+		player = new Player(level, 0, 0, input);
+		level.addEntity(player);
 	}
 	
 	public synchronized void start()
@@ -150,14 +155,14 @@ public class Game extends Canvas implements Runnable
 		}
 	}
 	
+	
 	public void tick()
 	{
 		tickCount++;
 
-		if (input.up.isPressed()) screen.yOffset--;
-		if (input.down.isPressed()) screen.yOffset++;
-		if (input.left.isPressed()) screen.xOffset--;
-		if (input.right.isPressed()) screen.xOffset++;
+		
+		
+		level.tick();
 	}
 	
 	public void render()
@@ -169,16 +174,22 @@ public class Game extends Canvas implements Runnable
 			return;
 		}
 		
-		for(int y = 0; y <32; y++)
+		int xOffset = player.x - (screen.width/2);
+		int yOffset = player.y - (screen.height/2);
+		
+		level.renderTiles(screen, xOffset, yOffset);
+		
+		for(int x = 0; x < level.width; x++)
 		{
-			for(int x = 0; x <32; x++)
+			int colour = Colours.get(-1, -1, -1, 000);
+			if(x % 10 == 0 && x != 0)
 			{
-				boolean flipX = x%2 ==1;
-				boolean flipY = y%2 ==1;
-				screen.render(x << 3, y << 3, 0, Colours.get(555, 505, 055, 550), flipX, flipY);
+				colour = Colours.get(-1, -1, -1, 500);
 			}
+			Font.render((x % 10) + "", screen, 0 + (x * 8), 0, colour);
 		}
 		
+		level.renderEntities(screen);
 		
 		for(int y = 0; y <screen.height; y++)
 		{

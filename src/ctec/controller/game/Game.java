@@ -25,8 +25,8 @@ public class Game extends Canvas implements Runnable
 	
 	public static final int WIDTH = 160;
 	public static final int HEIGHT = WIDTH/16*9;
-	public static final int SCALE = 3;
-	public static final String NAME = "Game";
+	public static final int SCALE = 4;
+	public static final String NAME = "1940s Detective Game";
 	
 	private JFrame frame;
 	
@@ -186,7 +186,7 @@ public class Game extends Canvas implements Runnable
 			{
 				colour = Colours.get(-1, -1, -1, 500);
 			}
-			Font.render((x % 10) + "", screen, 0 + (x * 8), 0, colour);
+
 		}
 		
 		level.renderEntities(screen);

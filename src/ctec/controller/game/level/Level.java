@@ -29,15 +29,7 @@ public class Level
 		{
 			for(int x = 0; x <width; x++)
 			{
-				if(x*y%10 <5)
-				{
 					tiles[x+y*width] = Tile.GRASS.getid();
-				}
-				else
-				{
-					tiles[x+y*width] = Tile.STONE.getid();
-				}
-
 			}
 		}
 	}
@@ -63,7 +55,7 @@ public class Level
 		{
 			for (int x = 0; x < width; x++)
 			{
-				getTile(x,y).render(screen, this, x <<3, y <<3);
+			getTile(x,y).render(screen, this, x <<3, y <<3);
 			}
 		}
 	}
